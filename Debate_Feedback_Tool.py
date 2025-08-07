@@ -5,11 +5,10 @@ import tempfile
 import requests
 from reportlab.lib.pagesizes import LETTER
 from reportlab.pdfgen import canvas
-import os
 
 # Config
 GROQ_API_KEY = "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"
-GROQ_MODEL = "mixtral-8x7b-32768"
+GROQ_MODEL = "llama3-70b-8192"
 
 st.set_page_config(page_title="Debate Feedback Tool", layout="centered")
 st.title("🗣️ Debate Feedback Tool")
@@ -25,9 +24,8 @@ def extract_text_from_docx(file):
     doc = Document(file)
     return "\n".join(p.text for p in doc.paragraphs if p.text.strip()).strip()
 
-# Analyze argument using Groq + Mixtral
+# Analyze argument using Groq + LLaMA3
 def analyze_argument(text):
-    st.spinner("Analyzing arguments...")
     prompt = f"""
 You are a skilled debate coach. Provide constructive, critical feedback in bullet points (MAX 250 words) for the following student debate text. Focus on rebuttable claims, weak arguments, unsupported assumptions, and areas for improvement:
 
