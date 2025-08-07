@@ -2,14 +2,13 @@ import streamlit as st
 import fitz  # PyMuPDF for PDFs
 from docx import Document
 import tempfile
-import openai
+from openai import OpenAI
 from reportlab.lib.pagesizes import LETTER
 from reportlab.pdfgen import canvas
 import os
-from datetime import datetime
 
-# Set up OpenAI API
-openai.api_key = os.getenv("OPENAI_API_KEY")  # or use st.secrets if deploying
+# Set up OpenAI client
+client = OpenAI()
 
 st.set_page_config(page_title="Debate Feedback Tool", layout="centered")
 st.title("🗣️ Debate Feedback Tool")
@@ -34,9 +33,9 @@ def analyze_argument(text):
         prompt = f"""
 You are an expert debate coach. Provide constructive, critical feedback in bullet points (max 250 words total) for the following student debate text. Focus on rebuttable claims, weak arguments, and areas for improvement:
 
-{text[:3000]}  # limit input for token control
+{text[:3000]}
 """
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=350,
